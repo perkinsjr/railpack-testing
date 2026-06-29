@@ -1,0 +1,16 @@
+{
+  "name": "testing-railpack",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Monorepo to test railpack integration with Unkey",
+  "packageManager": "pnpm@10.33.0",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "pnpm -r build",
+    "dev": "pnpm -r --parallel dev",
+    "start:web": "pnpm --filter @repo/web start",
+    "start:api": "pnpm --filter @repo/api start"
+  }
+}

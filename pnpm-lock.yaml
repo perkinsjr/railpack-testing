@@ -1,0 +1,23 @@
+lockfileVersion: '9.0'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
+importers:
+
+  .: {}
+
+  apps/api:
+    dependencies:
+      '@repo/reference':
+        specifier: workspace:*
+        version: link:../../packages/reference
+
+  apps/web:
+    dependencies:
+      '@repo/reference':
+        specifier: workspace:*
+        version: link:../../packages/reference
+
+  packages/reference: {}
