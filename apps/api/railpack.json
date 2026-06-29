@@ -2,6 +2,12 @@
   "$schema": "https://schema.railpack.com",
   "provider": "node",
   "steps": {
+    "install": {
+      "commands": [
+        "corepack enable",
+        "pnpm install --frozen-lockfile"
+      ]
+    },
     "build": {
       "inputs": [{ "step": "install" }],
       "commands": ["pnpm --filter @repo/api... run build"]

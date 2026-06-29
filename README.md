@@ -46,23 +46,33 @@ from the same repo**:
 - `apps/api/railpack.json`
 - `apps/web/railpack.json`
 
-Railpack always builds from the **repo root** (it needs the full pnpm workspace +
-`pnpm-lock.yaml`), so these configs are *not* auto-detected. Point each service at
-its config with the `RAILPACK_CONFIG_FILE` env var:
+> [!IMPORTANT]
+> **Each service's Root Directory MUST be the repo root — _not_ `apps/api` / `apps/web`.**
+>
+> If you set the root directory to the app folder, railpack only sees that folder.
+> It finds no `pnpm-workspace.yaml`, no `pnpm-lock.yaml`, and no root
+> `packageManager` field, so it falls back to **npm**, which then fails with:
+>
+> ```
+> npm error code EUNSUPPORTEDPROTOCOL
+> npm error Unsupported URL Type "workspace:": workspace:*
+> ```
+>
+> `workspace:*` can only be resolved by pnpm from the workspace root. Keep the
+> root directory at the repo root and select the service via `RAILPACK_CONFIG_FILE`.
 
-| Service | `RAILPACK_CONFIG_FILE`     |
-| ------- | -------------------------- |
-| api     | `apps/api/railpack.json`   |
-| web     | `apps/web/railpack.json`   |
+Point each service at its config with the `RAILPACK_CONFIG_FILE` env var:
 
-Keep each service's **root directory at the repo root** (do not set it to the app
-folder) — railpack needs the workspace to install dependencies.
+| Service | Root Directory | `RAILPACK_CONFIG_FILE`   |
+| ------- | -------------- | ------------------------ |
+| api     | _repo root_    | `apps/api/railpack.json` |
+| web     | _repo root_    | `apps/web/railpack.json` |
 
 ### What each config does
 
-1. **install** — auto-detected by railpack's node provider: it reads the root
-   `packageManager` field, enables corepack, and runs the pnpm workspace install
-   (with store caching).
+1. **install** — explicitly runs `corepack enable && pnpm install --frozen-lockfile`
+   from the repo root, so railpack never guesses npm. This installs the whole
+   workspace and links `@repo/reference` into the apps.
 2. **build** — overridden to `pnpm --filter @repo/<app>... run build`, which builds
    only that app *and its workspace dependencies* (e.g. `@repo/reference`).
 3. **deploy** — `startCommand` is `pnpm --filter @repo/<app> start`, so each
