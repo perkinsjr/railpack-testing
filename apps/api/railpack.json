@@ -1,0 +1,14 @@
+{
+  "$schema": "https://schema.railpack.com",
+  "provider": "node",
+  "steps": {
+    "build": {
+      "inputs": [{ "step": "install" }],
+      "commands": ["pnpm --filter @repo/api... run build"]
+    }
+  },
+  "deploy": {
+    "startCommand": "pnpm --filter @repo/api start",
+    "inputs": [{ "step": "build", "include": ["."] }]
+  }
+}
