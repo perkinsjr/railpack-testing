@@ -9,6 +9,7 @@
     "dev": "node src/index.js",
     "start": "node src/index.js"
   },
+  "packageManager": "pnpm@11.0.0",
   "dependencies": {
     "@repo/reference": "workspace:*"
   }
