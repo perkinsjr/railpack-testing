@@ -14,5 +14,8 @@
     "dev": "pnpm -r --parallel dev",
     "start:web": "pnpm --filter @repo/web start",
     "start:api": "pnpm --filter @repo/api start"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": ["esbuild"]
   }
 }

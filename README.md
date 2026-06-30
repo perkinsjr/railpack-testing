@@ -9,8 +9,8 @@ A minimal pnpm monorepo for testing [railpack](https://railpack.com) integration
 ├── pnpm-workspace.yaml        # workspaces: apps/*, packages/*
 ├── package.json               # root scripts
 ├── apps/
-│   ├── api/                   # @repo/api  — node http server (port 3001)
-│   └── web/                   # @repo/web  — node http server (port 3000)
+│   ├── api/                   # @repo/api  — node http server, no build (port 3001)
+│   └── web/                   # @repo/web  — Vite build → static server (port 3000)
 └── packages/
     └── reference/             # @repo/reference — shared mocked data/utils
 ```
@@ -36,7 +36,12 @@ Both services honor the `PORT` env var (handy for railpack/Railway).
 ### Endpoints
 
 - **api**: `GET /health`, `GET /keys`, `GET /verify?id=key_001`
-- **web**: `GET /` (HTML table of mocked keys), `GET /health`
+- **web**: `GET /` (Vite-built page; mocked keys bundled in), `GET /health`
+
+The **web** app has a real build step: `vite build` bundles `src/main.js`
+(which imports `@repo/reference`) into `apps/web/dist/`, and `pnpm start` runs
+`server.js` to serve that output. The **api** app needs no build — it's a plain
+node service — which is itself a valid railpack case to test.
 
 ## Deploying with railpack
 
